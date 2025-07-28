@@ -4,10 +4,10 @@ import {
     Modal,
     StyleSheet,
     Text,
+    TextInput,
     TouchableOpacity,
     View
 } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
 
 const NoteScreen = () => {
     const [notes, setNotes] = useState([
@@ -48,7 +48,7 @@ const NoteScreen = () => {
                     <TextInput 
                         style={styles.input}
                         placeholder='Enter note...'
-                        placeholderTextColor='#aaa'
+                        placeholderTextColor='#aaaaaa'
                         value={newNote}
                         onChangeText={setNewNote}
                     />
@@ -90,6 +90,32 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        backgroundColor: '#ffffff',
+        padding: 20,
+        borderRadius: 10,
+        width: '70%',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#cccccc',
+        borderRadius: 16,
+        padding: 10,
+        fontSize: 16,
+        marginBottom: 15,
+    }
 })
 
 export default NoteScreen;
