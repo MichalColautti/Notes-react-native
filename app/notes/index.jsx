@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { ActivityIndicator } from 'react-native-web';
 
 const NoteScreen = () => {
     const [notes, setNotes] = useState([]);
@@ -36,22 +37,33 @@ const NoteScreen = () => {
         setLoading(false);
     }
 
-    const addNote = () => {
+    const addNote = async () => {
         if(newNote.trim() == '') {
             return;
         }
 
-        setNotes((prevNotes) => [
-            ...prevNotes,
-            { id: Date.now.toString(), text: newNote}
-        ])
+        const response = await noteService.addNote(newNote);
+        if (response.error) {
+            Alert.alert('Error', response.error);
+        }
+        else {
+            setNotes([...notes, response.data]);
+        }
 
         setNewNote('')
         setModalVisible(false)
     }
 
-    return (<View style={styles.container}>
-        <NoteList notes={notes}/>
+    return (
+    <View style={styles.container}>
+        { loading ? (
+            <ActivityIndicator size='large' color='#007bff' />
+        ) : (
+            <>
+                {error && <Text style={styles.errorText}>{error}</Text>}
+                <NoteList notes={notes}/>
+            </> 
+        ) }
 
         <TouchableOpacity 
             style={styles.addButton}
@@ -90,6 +102,12 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontSize: 20,
         fontWeight: 'bold',
+    },
+    errorText: {
+        color: 'red',
+        textAlign: 'center',
+        marginBottom: 10,
+        fontSize: 16,
     },
 })
 
