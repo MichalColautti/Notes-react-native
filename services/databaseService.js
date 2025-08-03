@@ -21,7 +21,18 @@ const databaseService = {
             console.error('Error creating document:', error.message);
             return { error: error.message }
         }
-    }
+    },
+
+    // Delete docyment
+    async deleteDocument(dbId, colId, id) {
+        try {
+            await database.deleteDocument(dbId,colId,id);
+            return { succes: true }
+        } catch (error) {
+            console.error('Error creating document:', error.message);
+            return { error: error.message }
+        }
+    },
 };
 
 export default databaseService;
