@@ -1,7 +1,7 @@
 import NoteItem from "@/components/NoteItem"
 import { FlatList, View } from "react-native"
 
-const NoteList = ({notes, onDelete}) => {
+const NoteList = ({notes, onDelete, onEdit}) => {
     return (<View>
         <FlatList
                 data={notes}
@@ -10,6 +10,7 @@ const NoteList = ({notes, onDelete}) => {
                     <NoteItem 
                         note={item}
                         onDelete={onDelete} 
+                        onEdit={onEdit}
                     />
                 }
             />
