@@ -37,7 +37,7 @@ const NoteScreen = () => {
 
     const fetchNotes = async () => {
         setLoading(true);
-        const response = await noteService.getNotes();
+        const response = await noteService.getNotes(user.$id);
         if(response.error) {
             setError(response.error);
             Alert.alert('Error',response.error);
@@ -55,7 +55,7 @@ const NoteScreen = () => {
             return;
         }
 
-        const response = await noteService.addNote(newNote);
+        const response = await noteService.addNote(user.$id,newNote);
         if (response.error) {
             Alert.alert('Error', response.error);
         }
@@ -114,7 +114,13 @@ const NoteScreen = () => {
         ) : (
             <>
                 {error && <Text style={styles.errorText}>{error}</Text>}
-                <NoteList notes={notes} onDelete={deleteNote} onEdit={editNote}/>
+                {notes.length === 0 ? (
+                    <Text style={styles.noNotesText}>
+                        You have no notes.
+                    </Text>
+                ) : (
+                    <NoteList notes={notes} onDelete={deleteNote} onEdit={editNote}/>
+                )}
             </> 
         ) }
 
@@ -161,6 +167,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10,
         fontSize: 16,
+    },
+    noNotesText: {
+        textAlign: 'center',
+        fontSize: 18,
+        color: '#555555',
+        marginTop: 15,
+        fontWeight: 'bold',
     },
 })
 
