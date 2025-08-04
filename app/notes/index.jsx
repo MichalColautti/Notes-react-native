@@ -1,6 +1,8 @@
 import AddNoteModal from '@/components/AddNoteModal';
 import NoteList from '@/components/NoteList';
+import { useAuth } from '@/contexts/AuthContext';
 import noteService from '@/services/noteService';
+import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
     ActivityIndicator,
@@ -12,15 +14,26 @@ import {
 } from 'react-native';
 
 const NoteScreen = () => {
+    const router = useRouter();
+    const { user,loading:authLoading } = useAuth();
+
     const [notes, setNotes] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [newNote, setNewNote] = useState('');
-    const [loading,setLoading] = useState(true)
-    const [error, setError] = useState(null)
+    const [loading,setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => { 
+        if(!authLoading && !user) {
+            router.replace('/auth');
+        }
+    }, [user, authLoading, router]);
 
     useEffect(() => {
-        fetchNotes();
-    }, [])
+        if (user) {
+            fetchNotes();
+        }
+    }, [user])
 
     const fetchNotes = async () => {
         setLoading(true);
@@ -38,7 +51,7 @@ const NoteScreen = () => {
     }
 
     const addNote = async () => {
-        if(newNote.trim() == '') {
+        if(newNote.trim() === '') {
             return;
         }
 
@@ -90,7 +103,7 @@ const NoteScreen = () => {
             Alert.alert('Error', response.error);
         } else {
             setNotes((prevNotes) => prevNotes.map((note) => 
-                note.$id == id ? {...note, text:response.data.text} : note)) 
+                note.$id === id ? {...note, text:response.data.text} : note)) 
         }
     }
 

@@ -27,7 +27,7 @@ const authService = {
     },
 
     // Get logged in user
-    async getIser() {
+    async getUser() {
         try {
             return await account.get();
         } catch ( error ) {
