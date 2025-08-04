@@ -1,9 +1,26 @@
+import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "expo-router";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useEffect } from "react";
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import NotesImage from '../assets/images/notes.png';
 
 const HomeScreen = () => {
   const router = useRouter();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if(!loading && user) {
+      router.replace('/notes');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <View style={styles.centeredContainer}>
+        <ActivityIndicator size="large" color="#007bff" />
+      </View>
+    );
+  }
 
   return (
     <View
@@ -52,6 +69,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 30,
   },
+  centeredContainer: {
+    allignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+  }
 })
 
 export default HomeScreen
